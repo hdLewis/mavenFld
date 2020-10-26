@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mvca.mapper.FldMapper">
+    <cache/>
+    <select id="getFldById" resultType="Fld" parameterType="int">
+	SELECT * FROM fld where flda=#{flda}
+    </select>
+
+
+    <insert id="insertFld" parameterType="fld">
+	INSERT INTO fld(flda, fldb, fldc,fldd)
+	VALUES(#{flda}, #{fldb}, #{fldc},#{fldd})
+    </insert>
+
+    <resultMap type="fld" id="fldResultSet">
+        <id property="flda" column="flda"/>
+        <result property="fldb" column="fldb"/>
+        <result property="fldc" column="fldc"/>
+    </resultMap>
+
+    <select id="getFld" resultMap="fldResultSet" parameterType="fld">
+		SELECT * FROM fld where fldb like '%${fldb}%'
+    </select>
+
+    <delete id="deleteFld" parameterType="int" >
+             DELETE FROM fld WHERE flda=#{flda}
+    </delete>
+
+    <update id="updateFld" parameterType="Map">
+             UPDATE fld
+             SET  flda=#{flda},fldb=#{fldb},fldc=#{fldc}
+             WHERE flda=#{oldflda}
+     </update>
+
+
+    <!--
+
+         <insert id="insertLhda" parameterType="Lhda">
+         INSERT INTO lhda(lhda, lhdb, lhdc)
+         VALUES(#{lhda}, #{lhdb}, #{lhdc})
+         </insert>
+
+         <resultMap type="Lhda" id="LhdaResultSet">
+             <id property="lhda" column="lhda"/>
+             <result property="lhdb" column="lhdb"/>
+             <result property="lhdc" column="lhdc"/>
+         </resultMap>
+
+         <select id="getLhda" resultMap="LhdaResultSet" parameterType="Lhda">
+                 SELECT * FROM lhda where lhdc like '%${lhdc}%'
+         </select>
+
+         <select id="getLhda2" resultType="Map" parameterType="Map">
+                 SELECT * FROM lhda where lhdc like '%${lhdc}%'
+         </select>
+
+
+
+         <delete id="deleteLhda" parameterType="int">
+             DELETE FROM lhda WHERE lhda=#{anyname}
+         </delete>
+
+         <update id="updateLhda" parameterType="Map">
+             UPDATE lhda
+             SET  lhda=#{lhda.lhda},lhdb=#{lhda.lhdb},lhdc=#{lhda.lhdc}
+             WHERE lhda=#{oldlhda}
+         </update>
+
+         <select id="getUserById" parameterType="int" resultType="com.ibatis.model.User">
+             SELECT
+             user_id as userId,
+             email_id as emailId ,
+             password,
+             first_name as
+             firstName,
+             last_name as lastName
+             FROM USER
+             WHERE USER_ID = #{userId}
+         </select>
+
+     <resultMap type="User" id="UserResultSet">
+         <id property="userId" column="user_id" />
+         <result property="emailId" column="email_id" />
+         <result property="password" column="password" />
+         <result property="firstName" column="first_name" />
+         <result property="lastName" column="last_name" />
+     </resultMap>
+
+     <select id="getAllUsers" resultMap="UserResultSet">
+         SELECT * FROM USER
+     </select>
+
+         <insert id="insertUser" parameterType="User" useGeneratedKeys="true"
+             keyProperty="userId">
+             INSERT INTO USER(email_id, password, first_name,
+             last_name)
+             VALUES(#{emailId}, #{password}, #{firstName}, #{lastName})
+         </insert>
+
+         <update id="updateUser" parameterType="User">
+             UPDATE USER
+             SET
+             PASSWORD=#{password}
+             WHERE
+             USER_ID = #{userId}
+         </update>
+
+         <delete id="deleteUser" parameterType="int">
+             DELETE FROM USER WHERE
+             USER_ID = #{userId}
+         </delete>
+
+         -->
+
+</mapper>

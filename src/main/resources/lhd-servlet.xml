@@ -1,0 +1,64 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvn="http://www.springframework.org/schema/tool"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
+
+    <!--标记为@Component的类，在使用注解配置的情况下，系统启动时会被自动扫描，并添加到bean工厂中去-->
+    <context:component-scan base-package="com.mvca"/>
+
+    <!--springmvc的视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" scope="singleton">
+                                                                               <!-- scope 默认单例  prototype原型（用一次创建一个对象）-->
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!-- MultipartResolver 用于处理文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+
+
+    <!--处理静态资源-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <mvc:resources mapping="/static/**" location="/static/"></mvc:resources>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource">         <!--  property:属性-->
+        <property name="driverClassName"
+                  value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://192.168.137.10:3306/Airui?serverTimezone=UTC"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+        <property name="initialSize" value="5"></property>
+        <property name="maxIdle" value="2"></property>
+    </bean>
+
+    <bean class="org.apache.ibatis.session.Configuration">
+        <property name="cacheEnabled" value="true"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 引用数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations"
+                  value="classpath:mapper/FldMapper.xml"/>
+        <property name="typeAliasesPackage" value="com.mvca.model"></property>  <!--表对应的类   命名规范model/entity/domain/pojo-->
+    </bean>
+
+   <!-- 这段配置会扫描org.mybatis.spring.sample.mapper下的所有接口，然后创建各自接口的动态代理类。-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.mvca.mapper"></property>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>
+
+    <!--通过aop命名空间的<aop:aspectj-autoproxy />声明自动为spring容器中那些配置@aspectJ切面的bean创建代理，织入切面。-->
+    <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+
+
+
+</beans>
