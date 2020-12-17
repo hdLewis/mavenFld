@@ -104,4 +104,10 @@ public class FldController {   //实现和之前LhdaServlet一样的功能
             return "updateFld";
         }
     }
+
+    @RequestMapping(value = "/TTTTTTTTT", method = RequestMethod.POST)
+    public String update(HttpServletRequest req, @RequestParam Map map) throws Exception {
+        return null;
+    }
+
 }
